@@ -5,15 +5,15 @@ FROM ghcr.io/keitaroinc/ckan:2.9.5 as extbuild
 
 # Locations and tags, please use specific tags or revisions
 ENV HIERARCHY_GIT_URL=https://github.com/ckan/ckanext-hierarchy
-ENV HIERARCHY_GIT_BRANCH=v1.0.0
+ENV HIERARCHY_GIT_BRANCH=master
 
 # Switch to the root user
 USER root
 
 # Fetch and build the custom CKAN extensions
 RUN pip wheel --wheel-dir=/wheels git+${HIERARCHY_GIT_URL}@${HIERARCHY_GIT_BRANCH}#egg=ckanext-hierarchy
-RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/keitaroinc/ckanext-hierarchy/${HIERARCHY_GIT_BRANCH}/requirements.txt
-RUN curl -o /wheels/hierarchy.txt https://raw.githubusercontent.com/keitaroinc/ckanext-hierarchy/${HIERARCHY_GIT_BRANCH}/requirements.txt
+RUN pip wheel --wheel-dir=/wheels -r https://raw.githubusercontent.com/ckan/ckanext-hierarchy/${HIERARCHY_GIT_BRANCH}/requirements.txt
+RUN curl -o /wheels/hierarchy.txt https://raw.githubusercontent.com/ckan/ckanext-hierarchy/${HIERARCHY_GIT_BRANCH}/requirements.txt
 
 USER ckan
 
