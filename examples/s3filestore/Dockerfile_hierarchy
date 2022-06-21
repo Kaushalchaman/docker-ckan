@@ -21,7 +21,7 @@ USER ckan
 ### MAIN ###
 ############
 FROM ghcr.io/keitaroinc/ckan:2.9.5
-ENV APP_DIR=/etc/ckan/default
+ENV APP_DIR=/srv/app
 LABEL maintainer="Keitaro Inc <info@keitaro.com>"
 
 #ENV CKAN__PLUGINS envvars s3filestore image_view webpage_view text_view recline_view datastore datapusher hierarchy
