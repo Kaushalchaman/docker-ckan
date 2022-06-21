@@ -30,10 +30,9 @@ ENV CKAN__PLUGINS envvars  image_view webpage_view text_view recline_view datast
 USER root
 
 COPY --from=extbuild /wheels /srv/app/ext_wheels
-
+#RUN cd /usr/lib/ckan/default/src 
 # Install and enable the custom extensions
-RUN cd /usr/lib/ckan/default/src && \
-    pip install -e "git+https://github.com/davidread/ckanext-hierarchy.git#egg=ckanext-hierarchy" && \
+RUN pip install -e "git+https://github.com/davidread/ckanext-hierarchy.git#egg=ckanext-hierarchy" && \
     pip install -r ckanext-hierarchy/requirements.txt && \
     ckan config-tool "${APP_DIR}/production.ini" "ckan.plugins = ${CKAN__PLUGINS}" && \
     chown -R ckan:ckan /srv/app
