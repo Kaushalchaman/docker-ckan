@@ -21,7 +21,7 @@ USER ckan
 ### MAIN ###
 ############
 FROM ghcr.io/keitaroinc/ckan:2.9.5
-
+ENV APP_DIR=/etc/ckan/default
 LABEL maintainer="Keitaro Inc <info@keitaro.com>"
 
 #ENV CKAN__PLUGINS envvars s3filestore image_view webpage_view text_view recline_view datastore datapusher hierarchy
@@ -30,13 +30,14 @@ ENV CKAN__PLUGINS envvars  image_view webpage_view text_view recline_view datast
 USER root
 
 COPY --from=extbuild /wheels /srv/app/ext_wheels
-#RUN cd /usr/lib/ckan/default/src 
+WORKDIR /usr/lib/ckan/default/src 
 # Install and enable the custom extensions
 RUN pip install -e "git+https://github.com/davidread/ckanext-hierarchy.git#egg=ckanext-hierarchy" && \
     #pip install -r ckanext-hierarchy/requirements.txt && \
     pip install -r /srv/app/src/ckanext-hierarchy/requirements.txt && \
     ckan config-tool "${APP_DIR}/production.ini" "ckan.plugins = ${CKAN__PLUGINS}" && \
     chown -R ckan:ckan /srv/app
+    chown -R ckan:ckan /usr/lib/ckan/default/src
 #RUN pip install --no-index --find-links=/srv/app/ext_wheels ckanext-s3filestore && \
  #   pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/s3filestore.txt && \
   #  ckan config-tool "${APP_DIR}/production.ini" "ckan.plugins = ${CKAN__PLUGINS}" && \
@@ -46,3 +47,4 @@ RUN pip install -e "git+https://github.com/davidread/ckanext-hierarchy.git#egg=c
 RUN rm -rf /srv/app/ext_wheels
 
 USER ckan
+CMD ["/usr/sbin/apache2", "-D",  "FOREGROUND"]
