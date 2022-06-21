@@ -32,10 +32,11 @@ USER root
 COPY --from=extbuild /wheels /srv/app/ext_wheels
 
 # Install and enable the custom extensions
-RUN cd /usr/lib/ckan/default/src
-    pip install -e "git+https://github.com/davidread/ckanext-hierarchy.git#egg=ckanext-hierarchy"
-    pip install -r ckanext-hierarchy/requirements.txt
+RUN cd /usr/lib/ckan/default/src && \
+    pip install -e "git+https://github.com/davidread/ckanext-hierarchy.git#egg=ckanext-hierarchy" && \
+    pip install -r ckanext-hierarchy/requirements.txt && \
     ckan config-tool "${APP_DIR}/production.ini" "ckan.plugins = ${CKAN__PLUGINS}" && \
+    chown -R ckan:ckan /srv/app
 #RUN pip install --no-index --find-links=/srv/app/ext_wheels ckanext-s3filestore && \
  #   pip install --no-index --find-links=/srv/app/ext_wheels -r /srv/app/ext_wheels/s3filestore.txt && \
   #  ckan config-tool "${APP_DIR}/production.ini" "ckan.plugins = ${CKAN__PLUGINS}" && \
