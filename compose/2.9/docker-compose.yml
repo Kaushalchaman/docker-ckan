@@ -9,7 +9,7 @@ volumes:
 services:
   ckan:
     container_name: ckan
-    image: ghcr.io/keitaroinc/ckan:${CKAN_VERSION}
+    image: chaman53/s3filestore:2.9.6
     networks:
       - frontend
       - backend
