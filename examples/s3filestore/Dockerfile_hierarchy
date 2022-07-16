@@ -1,7 +1,7 @@
 ###################
 ### Extensions ####
 ###################
-FROM ghcr.io/keitaroinc/ckan:2.9.5 as extbuild
+FROM chaman53/s3filestore:s3filestore as extbuild
 
 # Locations and tags, please use specific tags or revisions
 ENV HIERARCHY_GIT_URL=https://github.com/ckan/ckanext-hierarchy
@@ -20,12 +20,12 @@ USER ckan
 ############
 ### MAIN ###
 ############
-FROM ghcr.io/keitaroinc/ckan:2.9.5
+FROM chaman53/s3filestore:s3filestore
 ENV APP_DIR=/srv/app
 LABEL maintainer="Keitaro Inc <info@keitaro.com>"
 
 #ENV CKAN__PLUGINS envvars s3filestore image_view webpage_view text_view recline_view datastore datapusher hierarchy
-ENV CKAN__PLUGINS envvars  image_view webpage_view text_view recline_view datastore datapusher hierarchy_display hierarchy_form
+ENV CKAN__PLUGINS envvars s3filestore image_view webpage_view text_view recline_view datastore datapusher hierarchy_display hierarchy_form
 # Switch to the root user
 USER root
 
@@ -43,4 +43,4 @@ RUN pip install -e "git+https://github.com/davidread/ckanext-hierarchy.git#egg=c
 RUN rm -rf /srv/app/ext_wheels
 
 USER ckan
-CMD ["/usr/sbin/apache2", "-D",  "FOREGROUND"]
+##CMD ["/usr/sbin/apache2", "-D",  "FOREGROUND"]
