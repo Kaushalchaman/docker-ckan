@@ -30,14 +30,15 @@ ENV CKAN__PLUGINS envvars s3filestore image_view webpage_view text_view recline_
 USER root
 
 COPY --from=extbuild /wheels /srv/app/ext_wheels
-WORKDIR /usr/lib/ckan/default/src 
+#WORKDIR /usr/lib/ckan/default/src 
+WORKDIR /srv/app
 # Install and enable the custom extensions
 RUN pip install -e "git+https://github.com/davidread/ckanext-hierarchy.git#egg=ckanext-hierarchy" && \
     #pip install -r ckanext-hierarchy/requirements.txt && \
     pip install -r /srv/app/src/ckanext-hierarchy/requirements.txt && \
     ckan config-tool "${APP_DIR}/production.ini" "ckan.plugins = ${CKAN__PLUGINS}" && \
-    #chown -R ckan:ckan /srv/app
-    chown -R ckan:ckan /usr/lib/ckan/default/src
+    chown -R ckan:ckan /srv/app
+    #chown -R ckan:ckan /usr/lib/ckan/default/src
 
 # Remove wheels
 RUN rm -rf /srv/app/ext_wheels
